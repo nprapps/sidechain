@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+  <body>
+
+    <h3>This space intentionally left blank.</h3>
+
+    <div class="size-changer"></div>
+
+    <style>
+      .size-changer { background: salmon; transition: all .3s ease; }
+    </style>
+
+    <script src="../dist/sidechain.js"></script>
+    <script>
+      Sidechain.registerGuest();
+
+      var changer = document.querySelector(".size-changer");
+      setInterval(() => changer.style.height = Math.random() * 200 + "px", 2000);
+    </script>
+  </body>
+</html>

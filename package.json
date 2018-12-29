@@ -1,0 +1,23 @@
+{
+  "name": "@nprapps/sidechain",
+  "version": "1.0.0",
+  "description": "Responsive iframes built for modern browsers",
+  "main": "./dist/sidechain.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup --config"
+  },
+  "keywords": [],
+  "author": "Thomas Wilburn",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nprapps/sidechain.git"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@webcomponents/custom-elements": "^1.2.1",
+    "document-register-element": "^1.13.1",
+    "rollup": "^1.0.0",
+    "rollup-plugin-node-resolve": "^4.0.0"
+  }
+}
