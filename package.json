@@ -1,6 +1,6 @@
 {
   "name": "@nprapps/sidechain",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Responsive iframes built for modern browsers",
   "main": "dist/sidechain.js",
   "module": "src/index.js",

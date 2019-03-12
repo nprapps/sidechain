@@ -78,6 +78,11 @@ window.addEventListener("message", function(e) {
   hosts.forEach(host => host.sendMessage(e.data));
 });
 
+// using legacy Pym events on your child page (i.e., Carebot)
+guest.on("on-screen", function(bucket) {
+  analytics.track("on-screen", bucket);
+});
+
 ```
 
 FAQ
