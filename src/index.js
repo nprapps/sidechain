@@ -52,12 +52,15 @@ class Sidechain extends HTMLElement {
   }
 
   sendMessage(message) {
+    if (typeof message == "object" && !(message instanceof Array) && this.hasAttribute("sentinel")) {
+      message.sentinel = message.sentinel || this.getAttribute("sentinel");
+    }
     this.iframe.contentWindow.postMessage(message, "*");
   }
 
   sendLegacy(param, value) {
     var pymFormatted = encodeLegacy(this.id, param, value);
-    this.iframe.contentWindow.postMessage(pymFormatted, "*");
+    this.sendMessage(pymFormatted);
   }
 
   static registerGuest(options) {

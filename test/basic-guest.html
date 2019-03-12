@@ -13,13 +13,25 @@
     <script type="module">
       import Sidechain from "../src/index.js";
 
-      var guest = Sidechain.registerGuest();
+      var guest = Sidechain.registerGuest({
+        sentinel: "guest"
+      });
 
-      var matching = Sidechain.matchMessage({ sentinel: "pattern" }, function(data) {
+      setInterval(function() {
+        guest.sendMessage({ call: "inside the house" });
+      }, 2000);
+
+      var patterned = Sidechain.matchMessage({ sentinel: "pattern" }, function(data) {
         console.log("Matched pattern: ", data);
       });
 
-      window.addEventListener("message", matching);
+      window.addEventListener("message", patterned);
+
+      var fromAttribute = Sidechain.matchMessage({ sentinel: "attribute" }, function(data) {
+        console.log("Got sentinel from attribute: ", data);
+      });
+
+      window.addEventListener("message", fromAttribute);
 
       var changer = document.querySelector(".size-changer");
       setInterval(() => changer.style.height = Math.random() * 200 + "px", 2000);

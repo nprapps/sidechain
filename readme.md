@@ -62,6 +62,14 @@ guest.on("on-screen", function(bucket) {
 
 ## API details
 
+### Element attributes
+
+`id` - Set the ID that's used for Pym messages.
+
+`src` - The URL for the guest page.
+
+`sentinel` - Set a string value to be set as the "sentinel" property on message objects (only if one isn't set already).
+
 ### Element methods
 
 `element.sendMessage(data)` - dispatches data to the guest page using the iframe's `contentWindow.postMessage()` interface.
@@ -75,6 +83,7 @@ guest.on("on-screen", function(bucket) {
 * `id` - set the ID for Pym messages (default: `childId` from the guest page URL search parameters)
 * `disablePolling` - set to `true` to turn off automatic height updates
 * `polling` - set to the number of milliseconds between height messages (default: 300)
+* `sentinel` - set a default sentinel value for messages sent by `guest.sendMessage()` (only on objects, and will not override an existing sentinel)
 
 `Sidechain.matchMessage(pattern, callback)` - returns a listener function compatible with window message events. The callback will only be executed if the message data contains the same property values as the pattern, and will be passed the message data.
 

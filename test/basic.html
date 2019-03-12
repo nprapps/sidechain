@@ -6,7 +6,7 @@
     </script>
     <h1>Sidechain guest/host</h1>
     <div class="sidechain-container">
-      <side-chain src="basic-guest.html"></side-chain>
+      <side-chain src="basic-guest.html" sentinel="attribute"></side-chain>
     </div>
 
 
@@ -24,9 +24,10 @@
         border: 2px dotted #AAA;
       }
     </style>
-    <script type="module" src="../src/index.js"></script>
     <script src="https://pym.nprapps.org/pym.v1.min.js"></script>
-    <script>
+    <script type="module">
+      import Sidechain from "../src/index.js";
+
       var element = document.querySelector("#guest");
       var parent = new pym.Parent(element.id, element.getAttribute("data-child-src"));
       var count = 0;
@@ -36,8 +37,14 @@
         // this message will be matched on the other side
         hosts.forEach(h => h.sendMessage({ sentinel: "pattern", value: count }));
         // this message should be ignored completely
-        hosts.forEach(h => h.sendMessage({ sentinel: "ignored", value: "error" }));
-      }, 2000)
+        hosts.forEach(h => h.sendMessage({ value: "error" }));
+      }, 2000);
+
+      var fromGuest = Sidechain.matchMessage({ sentinel: "guest" }, function(data) {
+        console.log("Message from guest: ", data);
+      });
+
+      window.addEventListener("message", fromGuest);
     </script>
   </body>
 </html>

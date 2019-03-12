@@ -23,6 +23,11 @@ export default class SidechainGuest {
   }
 
   sendMessage(message) {
+    if (typeof message == "object" && !(message instanceof Array)) {
+      if (this.options.sentinel && !message.sentinel) {
+        message.sentinel = this.options.sentinel;
+      }
+    }
     window.parent.postMessage(message, "*");
   }
 
