@@ -1,4 +1,4 @@
-import { encodeLegacy, decode } from "./encoding";
+import { encodeLegacy, decode } from "./encoding.js";
 
 export default class SidechainGuest {
   constructor(options = {}) {
@@ -33,10 +33,18 @@ export default class SidechainGuest {
     this.listeners[event].push(callback);
   }
 
+  off(event, callback) {
+    if (!callback) {
+      delete this.listeners[event];
+    } else {
+      this.listeners[event] = this.listeners[event].filter(c => c != callback);
+    }
+  }
+
   onMessage(e) {
     var decoded = typeof e.data == "string" ? decode(e.data) : e.data;
     if (decoded.type in this.listeners) {
-      this.listeners.forEach(cb => cb(decoded.value));
+      this.listeners[decoded.type].forEach(cb => cb(decoded.value));
     }
   }
 

@@ -1,5 +1,5 @@
-import { encodeLegacy, decode } from "./encoding";
-import SidechainGuest from "./guest";
+import { encodeLegacy, decode } from "./encoding.js";
+import SidechainGuest from "./guest.js";
 
 class Sidechain extends HTMLElement {
   constructor() {

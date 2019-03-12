@@ -10,12 +10,15 @@
       .size-changer { background: salmon; transition: all .3s ease; }
     </style>
 
-    <script src="../dist/sidechain.js"></script>
-    <script>
-      Sidechain.registerGuest();
+    <script type="module">
+      import Sidechain from "../src/index.js";
+
+      var guest = Sidechain.registerGuest();
 
       var changer = document.querySelector(".size-changer");
       setInterval(() => changer.style.height = Math.random() * 200 + "px", 2000);
+
+      guest.on("timer", e => console.log(`Timer event from parent: ${e}`));
     </script>
   </body>
 </html>
