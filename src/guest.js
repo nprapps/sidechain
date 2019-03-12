@@ -9,8 +9,11 @@ export default class SidechainGuest {
     this.lastHeight = 0;
     this.listeners = {};
 
-    window.addEventListener("resize", () => this.sendHeight());
-    window.addEventListener("message", e => this.onMessage(e));
+    this.sendHeight = this.sendHeight.bind(this);
+    this.onMessage = this.onMessage.bind(this);
+
+    window.addEventListener("resize", this.sendHeight);
+    window.addEventListener("message", this.onMessage);
 
     if (!options.disablePolling) {
       setInterval(() => this.sendHeight(), options.polling || 300);
@@ -43,7 +46,7 @@ export default class SidechainGuest {
 
   onMessage(e) {
     var decoded = typeof e.data == "string" ? decode(e.data) : e.data;
-    if (decoded.type in this.listeners) {
+    if (decoded.sentinel == "pym" && decoded.type in this.listeners) {
       this.listeners[decoded.type].forEach(cb => cb(decoded.value));
     }
   }

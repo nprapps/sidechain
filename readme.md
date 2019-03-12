@@ -1,5 +1,4 @@
-Sidechain
-=========
+# Sidechain
 
 Sidechain is a custom element for creating responsive iframes, compatible with both [AMP iframes](https://www.ampproject.org/docs/reference/components/amp-iframe) and [Pym embeds](http://blog.apps.npr.org/pym.js/). It provides a simple core built on modern JavaScript, and can serve as a foundation for more elaborate use cases.
 
@@ -19,8 +18,7 @@ You can load Sidechain into your projects through the following methods:
 
 By default, Sidechain supports all browsers shipping the Custom Elements V1 spec: Chrome, Firefox, and Safari. If you need to support Edge, there is a polyfilled version available in the package at `dist/sidechain.polyfilled.js`. To support older browsers, we recommend creating your own package using the base version of Sidechain and the [document-register-element polyfill](https://github.com/WebReflection/document-register-element).
 
-The basics
-----------
+## The basics
 
 Embedding a guest page with Sidechain requires two steps. First, on the host page, include the element with a `src` attribute pointing toward the page you want to embed:
 
@@ -34,8 +32,66 @@ Then, in your guest page, register it as a guest to start automatically sending 
 Sidechain.registerGuest()
 ```
 
-Code snippets
--------------
+## Pattern-matching for messages
+
+When sending messages between windows, you'll probably want to set a "sentinel" value that lets you filter and respond only to messages from your particular application. Writing this boilerplate can be tedious, so Sidechain includes a simple static method named `matchMessage` that accepts a pattern object and a callback, and returns a function that you can use as the window's message handler. The callback will be executed only if the pattern matches, and will receive the message data as its argument. For example, to match an NPR sentinel and a specific "type" value in the data, you could write your code like so:
+
+```javascript
+var pattern = {
+  sentinel: "npr",
+  type: "analytics"
+};
+var onNPR = Sidechain.matchMessage(pattern, function(data) {
+  console.log("NPR analytics received!", data);
+});
+window.addEventListener("message", onNPR);
+```
+
+Pattern objects are matched shallowly using strict equality for any keys provided, so it's best to use this to match a few constant string values and leave more complicated switching logic to your listener function.
+
+## Legacy events
+
+If using Sidechain in a mixed Pym/Sidechain environment, you may want your guest page to be able to listen to Pym events. For example, you might have visibility analytics on the host side that the guest should dispatch to GA. Sidechain guests include an `on()` method that's similar to Pym's `onMessage()` listeners, and will specifically handle Pym-formatted messages only.
+
+```javascript
+var guest = Sidechain.registerGuest();
+guest.on("on-screen", function(bucket) {
+  analytics.track("on-screen", bucket);
+});
+```
+
+## API details
+
+### Element methods
+
+`element.sendMessage(data)` - dispatches data to the guest page using the iframe's `contentWindow.postMessage()` interface.
+
+`element.sendLegacy(type, value)` - sends a Pym-formatted message to the guest page.
+
+### Static class methods
+
+`Sidechain.registerGuest(options)` - returns a guest instance, which is automatically registered to update a host with its height. The options object is optional, but supports the following properties:
+
+* `id` - set the ID for Pym messages (default: `childId` from the guest page URL search parameters)
+* `disablePolling` - set to `true` to turn off automatic height updates
+* `polling` - set to the number of milliseconds between height messages (default: 300)
+
+`Sidechain.matchMessage(pattern, callback)` - returns a listener function compatible with window message events. The callback will only be executed if the message data contains the same property values as the pattern, and will be passed the message data.
+
+### Guest instance methods
+
+`guest.sendMessage(data)` - convenience wrapper for `window.parent.postMessage()`.
+
+`guest.sendLegacy(type, value)` - sends a Pym-formatted message to the host page via `window.postMessage()`.
+
+`guest.sendHeight()` - updates the host with the current guest page height. 
+
+`guest.on(type, callback)` - registers a listener for Pym events, similar to the `child.onMessage()` function.
+
+`guest.off(type, callback)` - unregisters a listener that was registered with `on()`. The callback is optional--if it's omitted, all listeners for that type are removed.
+
+
+## Code snippets
 
 ```javascript
 // sending a message to an individual child
@@ -48,18 +104,18 @@ host.sendMessage({
 });
 
 // receiving a message in the child
-window.addEventListener("message", function(e) {
-  if (e.data.sentinel && e.data.sentinel == "npr") {
-    switch (e.data.type) {
-      case "log":
-        console.log(e.data.message); // Hello from NPR
-        break;
+// use matchMessage to automatically filter based on a pattern object
+var nprMatcher = Sidechain.matchMessage({ sentinel: "npr" }, function(data) {
+  switch (data.type) {
+    case "log":
+      console.log(data.message); // Hello from NPR
+      break;
 
-      default:
-        console.warn(`Sidechain message with unknown type (${e.data.type}) received`);
-    }
+    default:
+      console.warn(`Sidechain message with unknown type (${data.type}) received`);
   }
 });
+window.addEventListener("message", nprMatcher);
 
 // sending a message back up to the parent from a child
 var guest = Sidechain.registerGuest();
@@ -70,12 +126,11 @@ guest.sendMessage({
 });
 
 // re-broadcasting to all instances from the host page
-window.addEventListener("message", function(e) {
-  // only proceed on our specific messages
-  if (!e.data.sentinel || e.sentinel.data != "npr") return;
+var broadcastPattern = { sentinel: "npr", type: "broadcast" };
+window.addEventListener("message", Sidechain.matchMessage(broadcastPattern, function(data) {
   // broadcast the message back to all guest pages
   var hosts = document.querySelectorAll("side-chain");
-  hosts.forEach(host => host.sendMessage(e.data));
+  hosts.forEach(host => host.sendMessage(data));
 });
 
 // using legacy Pym events on your child page (i.e., Carebot)
@@ -85,8 +140,7 @@ guest.on("on-screen", function(bucket) {
 
 ```
 
-FAQ
----
+## FAQ
 
 **Is this an official replacement for Pym?**
 

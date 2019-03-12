@@ -3,7 +3,7 @@ export var decodeLegacy = function(message) {
   var matched = message.match(matcher);
   if (!matched) return {};
   var [ _, id, type, value ] = matched;
-  return { type, value };
+  return { type, value, sentinel: "pym" };
 };
 
 export var decode = function(message) {

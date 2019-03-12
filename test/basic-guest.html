@@ -15,6 +15,12 @@
 
       var guest = Sidechain.registerGuest();
 
+      var matching = Sidechain.matchMessage({ sentinel: "pattern" }, function(data) {
+        console.log("Matched pattern: ", data);
+      });
+
+      window.addEventListener("message", matching);
+
       var changer = document.querySelector(".size-changer");
       setInterval(() => changer.style.height = Math.random() * 200 + "px", 2000);
 

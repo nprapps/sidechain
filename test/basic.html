@@ -30,8 +30,13 @@
       var element = document.querySelector("#guest");
       var parent = new pym.Parent(element.id, element.getAttribute("data-child-src"));
       var count = 0;
+      var hosts = document.querySelectorAll("side-chain");
       setInterval(function() {
         parent.sendMessage("timer", count++);
+        // this message will be matched on the other side
+        hosts.forEach(h => h.sendMessage({ sentinel: "pattern", value: count }));
+        // this message should be ignored completely
+        hosts.forEach(h => h.sendMessage({ sentinel: "ignored", value: "error" }));
       }, 2000)
     </script>
   </body>

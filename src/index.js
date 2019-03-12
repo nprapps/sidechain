@@ -64,6 +64,16 @@ class Sidechain extends HTMLElement {
     return new SidechainGuest(options);
   }
 
+  static matchMessage(pattern, callback) {
+    return function(e) {
+      var { data } = e;
+      for (var k in pattern) {
+        if (data[k] !== pattern[k]) return;
+      }
+      callback(e.data);
+    }
+  }
+
 }
 
 customElements.define("side-chain", Sidechain);
