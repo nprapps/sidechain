@@ -34,7 +34,24 @@ Sidechain.registerGuest()
 
 ## Pattern-matching for messages
 
-When sending messages between windows, you'll probably want to set a "sentinel" value that lets you filter and respond only to messages from your particular application. Writing this boilerplate can be tedious, so Sidechain includes a simple static method named `matchMessage` that accepts a pattern object and a callback, and returns a function that you can use as the window's message handler. The callback will be executed only if the pattern matches, and will receive the message data as its argument. For example, to match an NPR sentinel and a specific "type" value in the data, you could write your code like so:
+When sending messages between windows, you'll probably want to set a flag value that lets you filter and respond only to messages from your particular application. Setting the `sentinel` attribute on the host, or the same option in the options when initializing a guest, will automatically add that value to messages sent between windows.
+
+```html
+<side-chain src="..." sentinel="npr"></side-chain>
+<script>
+  var host = document.querySelector("side-chain");
+  host.sendMessage({ hello: "world" });
+  /*
+  The actual message will look like:
+    {
+      sentinel: "npr",
+      hello: "world"
+    }
+  */
+</script>
+```
+
+On the receiving end, it can be tedious to write the sentinel checks in every message handler, so Sidechain includes a simple static method named `matchMessage` that accepts a pattern object and a callback, and returns a function that you can use as the window's message handler. The callback will be executed only if the pattern matches, and will receive the message data as its argument. For example, to match an NPR sentinel and a specific "type" value in the data, you could write your code like so:
 
 ```javascript
 var pattern = {
