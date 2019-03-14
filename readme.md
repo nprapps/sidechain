@@ -34,20 +34,27 @@ Sidechain.registerGuest()
 
 ## Pattern-matching for messages
 
-When sending messages between windows, you'll probably want to set a flag value that lets you filter and respond only to messages from your particular application. Setting the `sentinel` attribute on the host, or the same option in the options when initializing a guest, will automatically add that value to messages sent between windows.
+When sending messages between windows, you'll probably want to set a flag value that lets you filter and respond only to messages from your particular application. Setting the `sentinel` attribute on the host, or the same option when initializing a guest, will automatically add that value to messages sent between windows.
 
 ```html
 <side-chain src="..." sentinel="npr"></side-chain>
 <script>
   var host = document.querySelector("side-chain");
-  host.sendMessage({ hello: "world" });
+  host.sendMessage({ type: "analytics", onscreen: "10s" });
   /*
   The actual message will look like:
     {
       sentinel: "npr",
-      hello: "world"
+      type: "analytics",
+      onscreen: "10s"
     }
   */
+
+  // on the guest side:
+  var guest = Sidechain.registerGuest({
+    sentinel: "npr"
+  });
+  guest.sendMessage({ hello: "world" })
 </script>
 ```
 
