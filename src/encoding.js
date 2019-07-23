@@ -10,7 +10,7 @@ export var decode = function(message) {
   if (message.match(/^pym/)) {
     return decodeLegacy(message);
   }
-  return JSON.stringify(messsage);
+  return JSON.stringify(message);
 }
 
 export var encodeLegacy = function(id, param, value) {
