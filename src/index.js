@@ -79,6 +79,10 @@ class Sidechain extends HTMLElement {
 
 }
 
-customElements.define("side-chain", Sidechain);
+try {
+  customElements.define("side-chain", Sidechain);
+} catch (err) {
+  console.log("Sidechain couldn't be (re)defined");
+}
 
 export default Sidechain;
