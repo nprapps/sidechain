@@ -73,7 +73,7 @@ class Sidechain extends HTMLElement {
       for (var k in pattern) {
         if (data[k] !== pattern[k]) return;
       }
-      callback(e.data);
+      callback(e.data, e);
     }
   }
 
