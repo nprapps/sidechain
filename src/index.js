@@ -15,11 +15,13 @@ class Sidechain extends HTMLElement {
   }
 
   connectedCallback() {
-    if (!this.iframe.parentElement) {
+    if (!this.iframe.parentNode) {
       this.style.display = "block";
       var root = this.attachShadow ? this.attachShadow({ mode: "open" }) : this;
       root.appendChild(this.iframe);
     }
+    // prevent duplicate listeners
+    window.removeEventListener("message", this.onMessage);
     window.addEventListener("message", this.onMessage);
   }
 
