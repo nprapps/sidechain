@@ -9,8 +9,6 @@ Sidechain is a custom element for creating responsive iframes, compatible with b
 -   Smaller API surface area
 -   AMP- and Pym-compatible on both sides
 
-**Note: this library is still experimental and in development. Use with optimism, but also caution.**
-
 You can load Sidechain into your projects through the following methods:
 
 -   Via npm, at `@nprapps/sidechain`
@@ -177,7 +175,7 @@ guest.on("on-screen", function(bucket) {
 
 **Is this an official replacement for Pym?**
 
-**No, not at this time.** This project is a thought experiment on what Pym would look like if we wrote it today, keeping the core small and leveraging the features built-in to modern browsers. It is also a way to open a conversation with community members about what they want and need from an updated version of Pym.
+**Yes, but we're not deprecating Pym.** Sidechain was successfully used on our 2020 election pages, for our liveblogs and for results embeds on station sites. We believe it's currently stable enough for regular use, and recommend it for modern applications that use a bundler instead of a JavaScript CDN to load dependencies.
 
 **How do I scroll to an element in the guest?**
 
