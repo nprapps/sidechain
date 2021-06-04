@@ -1,25 +1,35 @@
 import { encodeLegacy, decode } from "./encoding.js";
 import SidechainGuest from "./guest.js";
 
+var template = `
+<style>
+:host {
+  display: block;
+}
+
+:host[hidden] {
+  display: none;
+}
+
+iframe {
+  width: 100%;
+  border: none;
+}
+</style>
+<iframe seamless="true" scrolling="no"></iframe>`;
+
 class Sidechain extends HTMLElement {
   constructor() {
     super();
 
-    var iframe = this.iframe = document.createElement("iframe");
-    iframe.style.width = "100%";
-    iframe.style.border = "none";
-    iframe.setAttribute("seamless", "true");
-    iframe.setAttribute("scrolling", "no");
+    var root = this.attachShadow({ mode: "open" });
+    root.innerHTML = template;
+    this.iframe = root.querySelector("iframe");
 
     this.onMessage = this.onMessage.bind(this);
   }
 
   connectedCallback() {
-    if (!this.iframe.parentNode) {
-      this.style.display = "block";
-      var root = this.attachShadow ? this.attachShadow({ mode: "open" }) : this;
-      root.appendChild(this.iframe);
-    }
     // prevent duplicate listeners
     window.removeEventListener("message", this.onMessage);
     window.addEventListener("message", this.onMessage);
@@ -81,8 +91,10 @@ class Sidechain extends HTMLElement {
 
 }
 
+Sidechain.Guest = SidechainGuest;
+
 try {
-  customElements.define("side-chain", Sidechain);
+  window.customElements.define("side-chain", Sidechain);
 } catch (err) {
   console.log("Sidechain couldn't be (re)defined");
 }

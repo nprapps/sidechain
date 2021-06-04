@@ -27,6 +27,7 @@
     <script src="https://pym.nprapps.org/pym.v1.min.js"></script>
     <script type="module">
       import Sidechain from "../src/index.js";
+      window.Sidechain = Sidechain;
 
       var element = document.querySelector("#guest");
       var parent = new pym.Parent(element.id, element.getAttribute("data-child-src"));
