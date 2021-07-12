@@ -14,7 +14,7 @@ You can load Sidechain into your projects through the following methods:
 -   Via npm, at `@nprapps/sidechain`
 -   Via unpkg, at `https://unpkg.com/@nprapps/sidechain`
 
-By default, Sidechain supports all browsers shipping the Custom Elements V1 spec: Chrome, Firefox, and Safari. If you need to support Edge, there is a polyfilled version available in the package at `dist/sidechain.polyfilled.js`. To support older browsers, we recommend creating your own package using the base version of Sidechain and the [document-register-element polyfill](https://github.com/WebReflection/document-register-element).
+By default, Sidechain supports all browsers shipping the Custom Elements and Shadow DOM V1 APIs: Chrome, Firefox, and Safari. To support older browsers, we recommend creating your own package using Babel or another transpiler and the [web components polyfill](https://github.com/webcomponents/polyfills/tree/master/packages/webcomponentsjs#how-to-use).
 
 ## The basics
 

@@ -18,7 +18,7 @@ iframe {
 </style>
 <iframe seamless="true" scrolling="no"></iframe>`;
 
-class Sidechain extends HTMLElement {
+export class Sidechain extends HTMLElement {
   constructor() {
     super();
 

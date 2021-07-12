@@ -1,20 +1,10 @@
 module.exports = [{
-  input: "index.js",
+  input: "src/index.js",
   output: {
     file: "dist/sidechain.js",
     format: "umd",
     name: "Sidechain",
-    compact: true
+    compact: true,
+    exports: "named"
   }
-}, {
-  input: "index.polyfilled.js",
-  output: {
-    file: "dist/sidechain.polyfilled.js",
-    format: "umd",
-    name: "Sidechain",
-    compact: true
-  },
-  plugins: [
-    require("rollup-plugin-node-resolve")()
-  ]
 }];
