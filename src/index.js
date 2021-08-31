@@ -89,6 +89,14 @@ export class Sidechain extends HTMLElement {
     }
   }
 
+  get src() {
+    return this.getAttribute("src");
+  }
+
+  set src(value) {
+    return this.setAttribute("src", value);
+  }
+
 }
 
 Sidechain.Guest = SidechainGuest;
