@@ -97,6 +97,14 @@ export class Sidechain extends HTMLElement {
     return this.setAttribute("src", value);
   }
 
+  get sentinel() {
+    return this.getAttribute("sentinel");
+  }
+
+  set sentinel(value) {
+    return this.setAttribute("sentinel", value);
+  }
+
 }
 
 Sidechain.Guest = SidechainGuest;
