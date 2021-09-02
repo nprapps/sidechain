@@ -16,10 +16,18 @@ export default class SidechainGuest {
     window.addEventListener("message", this.onMessage);
 
     if (!options.disablePolling) {
-      setInterval(() => this.sendHeight(), options.polling || 300);
+      this.interval = setInterval(() => this.sendHeight(), options.polling || 300);
     }
 
     this.sendHeight();
+  }
+
+  unregister() {
+    window.removeEventListener("resize", this.sendHeight);
+    window.removeEventListener("message", this.onMessage);
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
   }
 
   sendMessage(message) {
