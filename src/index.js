@@ -46,6 +46,11 @@ export class Sidechain extends HTMLElement {
   attributeChangedCallback(attribute, was, value) {
     switch (attribute) {
       case "src":
+        // support cross-origin permission setting
+        if (this.hasAttribute("allow")) {
+          var permissions = this.getAttribute("allow");
+          this.iframe.setAttribute("allow", permissions);
+        }
         this.iframe.src = value;
         break;
 
